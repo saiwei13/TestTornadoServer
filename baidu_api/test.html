@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9QQ2iFyQIhUxApguXVbC5uqr"></script>
+</head>
+<body>
+<div id="allmap"></div>
+hello world
+</body>
+</html>
+
+<script type="text/javascript">
+	// 百度地图API功能
+	console.log('ssss');
+
+    var str = {{ 'input' }};
+
+    var p1 = new BMap.Point(116.380967,39.913285);
+    var p2 = new BMap.Point(116.378242,39.91377);
+    var p3 = new BMap.Point(116.379393,39.91496);
+    var p4 = new BMap.Point(116.380428,39.91326);
+    var p5 = new BMap.Point(116.378244,39.91115);
+    var p6 = new BMap.Point(116.380548,39.913182);
+
+    var p7 = new BMap.Point(116.384474,39.91327);
+    var p8 = new BMap.Point(116.389268,39.913365);
+    var p9 = new BMap.Point(116.395413,39.913621);
+    var p10 = new BMap.Point(116.401986,39.913847);
+
+
+    var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.380967,39.913285), 15);
+    map.enableScrollWheelZoom(true);
+
+    var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/Mario.png", new BMap.Size(32, 70), {    //小车图片
+		//offset: new BMap.Size(0, -5),    //相当于CSS精灵
+		imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+	  });
+
+    var carMk = new BMap.Marker(p1,{icon:myIcon});
+    map.addOverlay(carMk);
+//    carMk.setPosition(pts[i]);
+
+    var i=0;
+    function move(tmp){
+        if(tmp == 1){
+            carMk.setPosition(p1);
+        }
+        else if(tmp == 2){
+           carMk.setPosition(p2);
+        } else if(tmp == 3){
+            carMk.setPosition(p3);
+        }
+        else if(tmp == 4){
+            carMk.setPosition(p4);
+        }
+        else if(tmp == 5){
+            carMk.setPosition(p5);
+        }
+        else if(tmp == 6){
+            carMk.setPosition(p6);
+        }
+
+        if(i == 6){
+            i = 0;
+            return;
+        }
+        setTimeout('move(i++)',500)
+    }
+
+    console.log('i=',i);
+
+    setTimeout('move(0)',500)
+
+</script>

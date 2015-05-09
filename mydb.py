@@ -141,6 +141,9 @@ try:
     # row = db.execute(sql)
     # print row
 
+    # sql = "insert into apk (package_name,version_code,version_name,url) values('%s',%s,'%s','%s')" % ('com.example.chenwei.testsocket',2,'1.2','download_apk');
+    # db.execute(sql)
+
     # for i in range(1, 5):
     #     print i
     #     db.execute("insert into user (userid,username,pwd) values(%s,%s,%s)"  ,md5(str(i)),'chenwei','abc',)
@@ -149,10 +152,12 @@ try:
 
     #delete
     # db.execute("delete from user where userid=5")
-    # db.execute("delete from user")
+    # db.execute("delete from apk")
 
-
+    #
     # db.execute("update user set username='cc' where userid='5'")
+
+    # db.execute("update user set username='chenwei' where username='bb'")
 
 except IOError:
     print 'ioerror'

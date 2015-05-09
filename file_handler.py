@@ -75,11 +75,25 @@ class DownloadFileHandler(tornado.web.RequestHandler):
 
     # def get(self, filename):
     #     print('get() i download file handler : ',filename)
+    def get(self):
+        pass
+
+    # def __init__(self):
+    #     print 'init'
 
     def post(self):
         print('post() i download file handler : ')
 
         filename = "/home/chenwei/tmp/python_server.txt";
+        self.download(filename);
+
+    def download(self,filename):
+        print('download()')
+
+        if not filename:
+            print 'filename is null'
+            return
+
         size = 0L;
         size = getsize(filename);
 
@@ -98,3 +112,5 @@ class DownloadFileHandler(tornado.web.RequestHandler):
         #记得有finish哦
         self.finish()
         print 'finish';
+
+

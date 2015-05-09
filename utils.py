@@ -4,6 +4,7 @@ __author__ = 'chenwei'
 
 import logging
 
+
 def md5(str):
     '''
     md5 加密

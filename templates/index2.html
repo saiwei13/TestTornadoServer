@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<script type="text/javascript">
+    var ws;
+    function onLoad(){
+
+        console.log('onLoad()')
+
+        ws = new WebSocket("ws://localhost:8888/location_ws");
+//
+        ws.onmessage = function(e){
+            alert(e.data)
+            sendMsg(e)
+        }
+    }
+
+    function sendMsg(e){
+        console.log('sendMsg()  ',e);
+//        ws.send(document.getElementById('msg').value);
+
+        ws.send('hello world from html')
+    }
+</script>
+<body onload='onLoad();'>
+Hello world, Javascript websocket
+
+
+
+<div id='test'></div>
+<script type='text/javascript'>
+    document.getElementById('test').innerText = function isCapsLockOn(e) {
+    var t = e.keyCode || e.which, n = e.shiftKey;
+    return t >= 65 && t <= 90 && !n || t >= 97 && t <= 122 && n ? !0 : !1
+}
+function showMsg(e) {
+    console.log(e);
+    var t = $("errorMessage");
+    if (!t)return;
+    t.style.display = "block", t.innerHTML = e
+}
+function hideMsg() {
+    $("errorMessage") && ($("errorMessage").style.display = "none");
+    var e = Sizzle("dd");
+    for (var t = 0; t < e.length; t++)if (e[t].style.backgroundColor = "#FFFFD9")e[t].style.backgroundColor = ""
+}
+function showCapsLockMsg(e) {
+    var t = $("capsLockMessage");
+    if (!t)return;
+    if (t.visible())return;
+    t.style.display = "block", t._hidetimer && (clearTimeout(t._hidetimer), t._hidetimer = null), t._hidetimer = setTimeout(function () {
+        t.style.display = "none"
+    }, 3e3)
+}
+function hideCapsLockMsg() {
+    $("capsLockMessage") && ($("capsLockMessage").style.display = "none")
+}
+function refreshCode_login() {
+    var e = $("verifyPic_login");
+    e.src = e.src.split("&")[0] + "&rnd=" + Math.random()
+}
+function closeError() {
+    $("yellow_error").style.display = "none"
+}
+function closeStop() {
+    $("account_stop").style.display = "none"
+}
+function closeLock() {
+    $("account_lock").style.display = "none"
+}
+function showCode() {
+    var e = $("code"), t = $("codeimg"), n = $("email");
+    new XN.net.xmlhttp({
+        url: "http://www.renren.com/ajax/ShowCaptcha",
+        data: "email=" + n.value,
+        method: "post",
+        onSuccess: function (n) {
+            n.responseText == 0 ? (e.style.display = "none", t.style.display = "none") : (e.style.display = "block", t.style.display = "block")
+        },
+        onError: function () {
+            XN.DO.showError("ç½‘ç»œé€šä¿¡å¤±è´¥ï¼Œè¯·ç¨åŽå†è¯•ï¼")
+        }
+    })
+}
+object.define("cryption", "net, dom", function (require, e) {
+    function s(e, t, n) {
+        this.e = U(e), this.d = U(t), this.m = U(n), this.chunkSize = 2 * $(this.m), this.radix = 16, this.barrett = new f(this.m)
+    }
+
+    function o(e) {
+        return (e < 10 ? "0" : "") + String(e)
+    }
+
+    function u(e, t) {
+        var n = new Array, r = t.length, i = 0;
+        while (i < r)n[i] = t.charCodeAt(i), i++;
+        while (n.length % e.chunkSize != 0)n[i++] = 0;
+        var s = n.length, o = "", u, a, f;
+        for (i = 0; i < s; i += e.chunkSize) {
+            f = new L, u = 0;
+            for (a = i; a < i + e.chunkSize; ++u)f.digits[u] = n[a++], f.digits[u] += n[a++] << 8;
+            var l = e.barrett.powMod(f, e.e), c = e.radix == 16 ? I(l) : P(l, e.radix);
+            o += c + " "
+        }
+        return o.substring(0, o.length - 1)
+    }
+
+    function a(e, t) {
+        var n = t.split(" "), r = "", i, s, o;
+        for (i = 0; i < n.length; ++i) {
+            var u;
+            e.radix == 16 ? u = U(n[i]) : u = z(n[i], e.radix), o = e.barrett.powMod(u, e.d);
+            for (s = 0; s <= $(o); ++s)r += String.fromCharCode(o.digits[s] & 255, o.digits[s] >> 8)
+        }
+        return r.charCodeAt(r.length - 1) == 0 && (r = r.substring(0, r.length - 1)), r
+    }
+
+    function f(e) {
+        this.modulus = O(e), this.k = $(this.modulus) + 1;
+        var t = new L;
+        t.digits[2 * this.k] = 1, this.mu = ut(t, this.modulus), this.bkplus1 = new L, this.bkplus1.digits[this.k + 1] = 1, this.modulo = l, this.multiplyMod = c, this.powMod = h
+    }
+
+    function l(e) {
+        var t = rt(e, this.k - 1), n = K(t, this.mu), r = rt(n, this.k + 1), i = it(e, this.k + 1), s = K(r, this.modulus), o = it(s, this.k + 1), u = V(i, o);
+        u.isNeg && (u = X(u, this.bkplus1));
+        var a = st(u, this.modulus) >= 0;
+        while (a)u = V(u, this.modulus), a = st(u, this.modulus) >= 0;
+        return u
+    }
+
+    function c(e, t) {
+        var n = K(e, t);
+        return this.modulo(n)
+    }
+
+    function h(e, t) {
+        var n = new L;
+        n.digits[0] = 1;
+        var r = e, i = t;
+        for (; ;) {
+            (i.digits[0] & 1) != 0 && (n = this.multiplyMod(n, r)), i = tt(i, 1);
+            if (i.digits[0] == 0 && $(i) == 0)break;
+            r = this.multiplyMod(r, r)
+        }
+        return n
+    }
+
+    function N(e) {
+        E = e, S = new Array(E);
+        for (var t = 0; t < S.length; t++)S[t] = 0;
+        x = new L, T = new L, T.digits[0] = 1
+    }
+
+    function L(e) {
+        typeof e == "boolean" && e == 1 ? this.digits = null : this.digits = S.slice(0), this.isNeg = !1
+    }
+
+    function A(e) {
+        var t = e.charAt(0) == "-", n = t ? 1 : 0, r;
+        while (n < e.length && e.charAt(n) == "0")++n;
+        if (n == e.length)r = new L; else {
+            var i = e.length - n, s = i % C;
+            s == 0 && (s = C), r = M(Number(e.substr(n, s))), n += s;
+            while (n < e.length)r = X(K(r, k), M(Number(e.substr(n, C)))), n += C;
+            r.isNeg = t
+        }
+        return r
+    }
+
+    function O(e) {
+        var t = new L(!0);
+        return t.digits = e.digits.slice(0), t.isNeg = e.isNeg, t
+    }
+
+    function M(e) {
+        var t = new L;
+        t.isNeg = e < 0, e = Math.abs(e);
+        var n = 0;
+        while (e > 0)t.digits[n++] = e & b, e >>= d;
+        return t
+    }
+
+    function _(e) {
+        var t = "";
+        for (var n = e.length - 1; n > -1; --n)t += e.charAt(n);
+        return t
+    }
+
+    function P(e, t) {
+        var n = new L;
+        n.digits[0] = t;
+        var r = ot(e, n), i = D[r[1].digits[0]];
+        while (st(r[0], x) == 1)r = ot(r[0], n), digit = r[1].digits[0], i += D[r[1].digits[0]];
+        return (e.isNeg ? "-" : "") + _(i)
+    }
+
+    function H(e) {
+        var t = new L;
+        t.digits[0] = 10;
+        var n = ot(e, t), r = String(n[1].digits[0]);
+        while (st(n[0], x) == 1)n = ot(n[0], t), r += String(n[1].digits[0]);
+        return (e.isNeg ? "-" : "") + _(r)
+    }
+
+    function F(e) {
+        var t = 15, n = "";
+        for (i = 0; i < 4; ++i)n += B[e & t], e >>>= 4;
+        return _(n)
+    }
+
+    function I(e) {
+        var t = "", n = $(e);
+        for (var r = $(e); r > -1; --r)t += F(e.digits[r]);
+        return t
+    }
+
+    function q(e) {
+        var t = 48, n = t + 9, r = 97, i = r + 25, s = 65, o = 90, u;
+        return e >= t && e <= n ? u = e - t : e >= s && e <= o ? u = 10 + e - s : e >= r && e <= i ? u = 10 + e - r : u = 0, u
+    }
+
+    function R(e) {
+        var t = 0, n = Math.min(e.length, 4);
+        for (var r = 0; r < n; ++r)t <<= 4, t |= q(e.charCodeAt(r));
+        return t
+    }
+
+    function U(e) {
+        var t = new L, n = e.length;
+        for (var r = n, i = 0; r > 0; r -= 4, ++i)t.digits[i] = R(e.substr(Math.max(r - 4, 0), Math.min(r, 4)));
+        return t
+    }
+
+    function z(e, t) {
+        var n = e.charAt(0) == "-", r = n ? 1 : 0, i = new L, s = new L;
+        s.digits[0] = 1;
+        for (var o = e.length - 1; o >= r; o--) {
+            var u = e.charCodeAt(o), a = q(u), f = Q(s, a);
+            i = X(i, f), s = Q(s, t)
+        }
+        return i.isNeg = n, i
+    }
+
+    function W(e) {
+        return (e.isNeg ? "-" : "") + e.digits.join(" ")
+    }
+
+    function X(e, t) {
+        var n;
+        if (e.isNeg != t.isNeg)t.isNeg = !t.isNeg, n = V(e, t), t.isNeg = !t.isNeg; else {
+            n = new L;
+            var r = 0, i;
+            for (var s = 0; s < e.digits.length; ++s)i = e.digits[s] + t.digits[s] + r, n.digits[s] = i & 65535, r = Number(i >= m);
+            n.isNeg = e.isNeg
+        }
+        return n
+    }
+
+    function V(e, t) {
+        var n;
+        if (e.isNeg != t.isNeg)t.isNeg = !t.isNeg, n = X(e, t), t.isNeg = !t.isNeg; else {
+            n = new L;
+            var r, i;
+            i = 0;
+            for (var s = 0; s < e.digits.length; ++s)r = e.digits[s] - t.digits[s] + i, n.digits[s] = r & 65535, n.digits[s] < 0 && (n.digits[s] += m), i = 0 - Number(r < 0);
+            if (i == -1) {
+                i = 0;
+                for (var s = 0; s < e.digits.length; ++s)r = 0 - n.digits[s] + i, n.digits[s] = r & 65535, n.digits[s] < 0 && (n.digits[s] += m), i = 0 - Number(r < 0);
+                n.isNeg = !e.isNeg
+            } else n.isNeg = e.isNeg
+        }
+        return n
+    }
+
+    function $(e) {
+        var t = e.digits.length - 1;
+        while (t > 0 && e.digits[t] == 0)--t;
+        return t
+    }
+
+    function J(e) {
+        var t = $(e), n = e.digits[t], r = (t + 1) * v, i;
+        for (i = r; i > r - v; --i) {
+            if ((n & 32768) != 0)break;
+            n <<= 1
+        }
+        return i
+    }
+
+    function K(e, t) {
+        var n = new L, r, i = $(e), s = $(t), o, u, a;
+        for (var f = 0; f <= s; ++f) {
+            r = 0, a = f;
+            for (j = 0; j <= i; ++j, ++a)u = n.digits[a] + e.digits[j] * t.digits[f] + r, n.digits[a] = u & b, r = u >>> d;
+            n.digits[f + i + 1] = r
+        }
+        return n.isNeg = e.isNeg != t.isNeg, n
+    }
+
+    function Q(e, t) {
+        var n, r, i;
+        result = new L, n = $(e), r = 0;
+        for (var s = 0; s <= n; ++s)i = result.digits[s] + e.digits[s] * t + r, result.digits[s] = i & b, r = i >>> d;
+        return result.digits[1 + n] = r, result
+    }
+
+    function G(e, t, n, r, i) {
+        var s = Math.min(t + i, e.length);
+        for (var o = t, u = r; o < s; ++o, ++u)n[u] = e[o]
+    }
+
+    function Z(e, t) {
+        var n = Math.floor(t / v), r = new L;
+        G(e.digits, 0, r.digits, n, r.digits.length - n);
+        var i = t % v, s = v - i;
+        for (var o = r.digits.length - 1, u = o - 1; o > 0; --o, --u)r.digits[o] = r.digits[o] << i & b | (r.digits[u] & Y[i]) >>> s;
+        return r.digits[0] = r.digits[o] << i & b, r.isNeg = e.isNeg, r
+    }
+
+    function tt(e, t) {
+        var n = Math.floor(t / v), r = new L;
+        G(e.digits, n, r.digits, 0, e.digits.length - n);
+        var i = t % v, s = v - i;
+        for (var o = 0, u = o + 1; o < r.digits.length - 1; ++o, ++u)r.digits[o] = r.digits[o] >>> i | (r.digits[u] & et[i]) << s;
+        return r.digits[r.digits.length - 1] >>>= i, r.isNeg = e.isNeg, r
+    }
+
+    function nt(e, t) {
+        var n = new L;
+        return G(e.digits, 0, n.digits, t, n.digits.length - t), n
+    }
+
+    function rt(e, t) {
+        var n = new L;
+        return G(e.digits, t, n.digits, 0, n.digits.length - t), n
+    }
+
+    function it(e, t) {
+        var n = new L;
+        return G(e.digits, 0, n.digits, 0, t), n
+    }
+
+    function st(e, t) {
+        if (e.isNeg != t.isNeg)return 1 - 2 * Number(e.isNeg);
+        for (var n = e.digits.length - 1; n >= 0; --n)if (e.digits[n] != t.digits[n])return e.isNeg ? 1 - 2 * Number(e.digits[n] > t.digits[n]) : 1 - 2 * Number(e.digits[n] < t.digits[n]);
+        return 0
+    }
+
+    function ot(e, t) {
+        var n = J(e), r = J(t), i = t.isNeg, s, o;
+        if (n < r)return e.isNeg ? (s = O(T), s
+    .
+        isNeg = !t.isNeg, e.isNeg = !1, t.isNeg = !1, o = V(t, e), e.isNeg = !0, t.isNeg = i
+    ):
+        (s = new L, o = O(e)), new Array(s, o);
+        s = new L, o = e;
+        var u = Math.ceil(r / v) - 1, a = 0;
+        while (t.digits[u] < g)t = Z(t, 1), ++a, ++r, u = Math.ceil(r / v) - 1;
+        o = Z(o, a), n += a;
+        var f = Math.ceil(n / v) - 1, l = nt(t, f - u);
+        while (st(o, l) != -1)++s.digits[f - u], o = V(o, l);
+        for (var c = f; c > u; --c) {
+            var h = c >= o.digits.length ? 0 : o.digits[c], p = c - 1 >= o.digits.length ? 0 : o.digits[c - 1], d = c - 2 >= o.digits.length ? 0 : o.digits[c - 2], w = u >= t.digits.length ? 0 : t.digits[u], E = u - 1 >= t.digits.length ? 0 : t.digits[u - 1];
+            h == w ? s.digits[c - u - 1] = b : s.digits[c - u - 1] = Math.floor((h * m + p) / w);
+            var S = s.digits[c - u - 1] * (w * m + E), x = h * y + (p * m + d);
+            while (S > x)--s.digits[c - u - 1], S = s.digits[c - u - 1] * (w * m | E), x = h * m * m + (p * m + d);
+            l = nt(t, c - u - 1), o = V(o, Q(l, s.digits[c - u - 1])), o.isNeg && (o = X(o, l), --s.digits[c - u - 1])
+        }
+        return o = tt(o, a), s.isNeg = e.isNeg != i, e.isNeg && (i ? s = X(s, T) : s = V(s, T), t = tt(t, a), o = V(t, o)), o.digits[0] == 0 && $(o) == 0 && (o.isNeg = !1), new Array(s, o)
+    }
+
+    function ut(e, t) {
+        return ot(e, t)[0]
+    }
+
+    function at(e, t) {
+        return ot(e, t)[1]
+    }
+
+    function ft(e, t, n) {
+        return at(K(e, t), n)
+    }
+
+    function lt(e, t) {
+        var n = T, r = e;
+        for (; ;) {
+            (t & 1) != 0 && (n = K(n, r)), t >>= 1;
+            if (t == 0)break;
+            r = K(r, r)
+        }
+        return n
+    }
+
+    function ct(e, t, n) {
+        var r = T, i = e, s = t;
+        for (; ;) {
+            (s.digits[0] & 1) != 0 && (r = ft(r, i, n)), s = tt(s, 1);
+            if (s.digits[0] == 0 && $(s) == 0)break;
+            i = ft(i, i, n)
+        }
+        return r
+    }
+
+    var t = require("dom"), n = require("net"), r = null;
+    e.getKeys = function (e, t) {
+        var i = this;
+        i.getKeys = function () {
+            var e = new n.Request({
+                url: "http://login.renren.com/ajax/getEncryptKey", onSuccess: function (e) {
+                    var n = JSON.parse(e.responseText);
+                    n.isEncrypt == 1 && (N(n.maxdigits * 2), r = new s(n.e, "null", n.n), XN.isFunction(t) && t.call(this, r, n.rkey))
+                }, onError: function () {
+                    XN.DO.showError("ç½‘ç»œé€šä¿¡å¤±è´¥ï¼Œè¯·ç¨åŽå†è¯•ï¼")
+                }
+            });
+            e.send()
+        }, i.getKeys()
+    }, e.encrypt = function (e, t) {
+        encrypted = u(r, e), t(encrypted)
+    };
+    var p = 2, d = 16, v = d, m = 65536, g = m >>> 1, y = m * m, b = m - 1, w = 9999999999999998, E, S, x, T;
+    N(20);
+    var C = 15, k = M(1e15), D = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"), B = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"), Y = new Array(0, 32768, 49152, 57344, 61440, 63488, 64512, 65024, 65280, 65408, 65472, 65504, 65520, 65528, 65532, 65534, 65535), et = new Array(0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535)
+}), object.define("login/cryption", "string, dom, net, cryption", function (require, e) {
+    function a(e) {
+        try {
+        } catch (t) {
+        }
+    }
+
+    function f(e, t, r, s) {
+        e != undefined && e != null && (e.indexOf("?") == -1 ? e += "?1=1" : e += "&1=1");
+        try {
+            var o = new Date;
+            e = e + "&uniqueTimestamp=" + o.getFullYear() + o.getMonth() + o.getDay() + o.getHours() + o.getSeconds() + o.getUTCMilliseconds()
+        } catch (f) {
+        }
+        var l = XN.form.getElements("loginForm");
+        u != "" && (l = l.filter(function (e, t) {
+            return e.name != "password"
+        }));
+        var c = XN.form.serializeElements(l, "string");
+        c += "&" + i.toQueryString(t);
+        var h = new n.Request({
+            url: e, method: "post", onSuccess: function (e) {
+                if (r) {
+                    var t = JSON.parse(e.responseText);
+                    r(t)
+                } else a()
+            }, onError: function () {
+                XN.DO.showError("ç½‘ç»œé€šä¿¡å¤±è´¥ï¼Œè¯·ç¨åŽå†è¯•ï¼")
+            }
+        });
+        h.send(c)
+    }
+
+    function l() {
+        define(function (require) {
+            require("ui/dialog");
+            var e = require("jquery"), t = '<div>                            <p class="login-dialog-title"><span class="ui-icon ui-icon-failure"></span> æ‚¨çš„å¸å·ç”±äºŽä»¥ä¸‹æŸç§åŽŸå› éœ€è¦è§£é”æ‰èƒ½ç™»å½•</p>                            <ul class="login-dialog-list">                                <li>åˆ é™¤è¿‡å¸å·</li>                                <li>é•¿æ—¶é—´æ²¡æœ‰ç™»å½•ç½‘ç«™</li>                                <li>å®‰å…¨åŽŸå› </li>                            </ul>                        </div>';
+            e.ui.dialog({
+                dialogClass: "dialog-login-error",
+                width: 500,
+                height: 250,
+                buttons: [{
+                    text: "å–æ¶ˆ", click: function () {
+                        var t = e(this).dialog("instance");
+                        t._trigger("cancel"), t.close()
+                    }
+                }, {
+                    text: "ç«‹å³è§£é”", "class": "ui-button-blue", click: function () {
+                        window.open("http://safe.renren.com/relive.do", "_blank")
+                    }
+                }]
+            }, e(t))
+        })
+    }
+
+    function c() {
+        define(function (require) {
+            require("ui/dialog");
+            var e = require("jquery"), t = '<div>                            <p class="login-dialog-title"><span class="ui-icon ui-icon-failure"></span> æ‚¨çš„å¸å·å·²åœæ­¢ä½¿ç”¨ï¼Œå¦‚æœ‰ç–‘é—®è¯·è”ç³»å®¢æœ</p>                        </div>';
+            e.ui.dialog({
+                dialogClass: "dialog-login-error",
+                width: 500,
+                height: 200,
+                buttons: [{
+                    text: "å–æ¶ˆ", click: function () {
+                        var t = e(this).dialog("instance");
+                        t._trigger("cancel"), t.close()
+                    }
+                }, {
+                    text: "è”ç³»å®¢æœ", "class": "ui-button-blue", click: function () {
+                        window.open("http://help.renren.com/#http://help.renren.com/support/contomvice?pid=2&selection={couId:193,proId:342,cityId:1000375}", "_blank")
+                    }
+                }]
+            }, e(t))
+        })
+    }
+
+    function h() {
+        var e = $("errorMessage"), t = $("codeTip"), n = $("code"), r = $("codeimg"), i = $("forgetPwd"), s = $("getpassword"), a = $("account_stop"), h = $("account_lock"), p = $("password"), d = $("email"), v = $("sendemail"), m = $("yellow_error"), g = $("gotoEmail"), y;
+        u != "" ? y = {
+            password: o,
+            rkey: u
+        } : y = {}, y.f = encodeURIComponent(document.referrer), f("http://www.renren.com/ajaxLogin/login", y, function (i) {
+            i.code == 1 ? window.location.href = i.homeUrl : (e.style.display = "block", t.style.visibility = "visible", showMsg(i.failDescription), i.catchaCount > 2 && (n.style.display = "block", r.style.display = "block", i.catchaCount > 4 && i.failCode == 4 && i.emailLoginUrl && (v.innerHTML = i.email, m.style.display = "block", n.style.display == "block" && (m.style.height = "310px"), g.href = i.emailLoginUrl, XN.event.addEvent(g, "click", function () {
+                m.style.display = "none"
+            }))), i.failCode == 1 || i.failCode == 2 || i.failCode == 4 || i.failCode == 128 ? (d.parentNode.style.backgroundColor = "#FFFFD9", p.parentNode.style.backgroundColor = "#FFFFD9", p.value = "", Sizzle("#code .input-text")[0].value = "", p.focus()) : i.failCode == 512 ? (n.style.display = "block", r.style.display = "block", n.getElementsByTagName("dd")[0].style.backgroundColor = "#FFFFD9", Sizzle("#code .input-text")[0].value = "", t.style.visibility = "hidden") : i.failCode == 64 ? (l(), t.style.visibility = "hidden") : i.failCode == 16 && (c(), t.style.visibility = "hidden"), refreshCode_login())
+        })
+    }
+
+    var t = require("cryption"), n = require("net"), r = require("dom"), i = require("string"), s = "", o = "", u = "";
+    window.getKeys = function () {
+        t.getKeys("key.jsp?generateKeypair=true", function (e, t) {
+            u = t
+        })
+    }, $("loginForm") && ($("loginForm").onsubmit = function () {
+        function a(t) {
+            var n = "";
+            t = t.replace(/^\s+|\s+$/g, "");
+            for (var r = 0, i = t.length; r < i; r++) {
+                var s = t.charCodeAt(r);
+                s >= 65281 && s <= 65373 ? n += String.fromCharCode(s - 65248) : n += String.fromCharCode(s)
+            }
+            return n = n.replace(/Â·/, "@"), e = n = n.replace(/[ã€‚|,|ï¼Œ|ã€]/g, "."), /^[A-Z_a-z0-9-\.]+@([A-Z_a-z0-9-]+\.)+[a-z0-9A-Z]{2,4}$/.test(n)
+        }
+
+        var e = $("email").value.trim(), n = $("password").value.trim(), r = $("email"), i = $("password");
+        if (e == null || e == "" || e == "é‚®ç®±/æ‰‹æœºå·/ç”¨æˆ·å")return showMsg("è¯·è¾“å…¥ç”¨æˆ·åå’Œå¯†ç "), r.focus(), r.parentNode.style.backgroundColor = "#FFFFD9", !1;
+        if (/^\s*$/.test(n))return showMsg("æ‚¨è¿˜æ²¡æœ‰å¡«å†™å¯†ç "), i.focus(), i.parentNode.style.backgroundColor = "#FFFFD9", !1;
+        if (/@/.test(e)) {
+            if (!a(e))return showMsg("E-mailæ ¼å¼é”™è¯¯"), r.focus(), r.parentNode.style.backgroundColor = "#FFFFD9", !1
+        } else if (!/^[\w@_.-]{3,50}$/.test(e))return showMsg("å¸å·æ ¼å¼é”™è¯¯"), r.focus(), r.parentNode.style.backgroundColor = "#FFFFD9", !1;
+        return u != "" ? t.encrypt(e, function (e) {
+            s = e, setTimeout(function () {
+                t.encrypt(n, function (e) {
+                    o = e, h()
+                })
+            }, 0)
+        }) : h(), !1
+    })
+}), function () {
+    window.XN || (XN = {}), XN.Browser || (XN.Browser = XN.BORWSER = {}), XN.Browser.addHomePage = function (e) {
+        if (!!window.attachEvent && !window.opera)document.body.style.behavior = "url(#default#homepage)", document.body.setHomePage(e); else {
+            if (!window.clipboardData || !clipboardData.setData) {
+                alert("æ‚¨çš„æµè§ˆå™¨ä¸å…è®¸è„šæœ¬è®¿é—®å‰ªåˆ‡æ¿ï¼Œè¯·æ‰‹åŠ¨è®¾ç½®~");
+                return
+            }
+            clipboardData.setData("text", e), alert("ç½‘å€å·²ç»æ‹·è´åˆ°å‰ªåˆ‡æ¿,è¯·æ‚¨æ‰“å¼€æµè§ˆå™¨çš„é€‰é¡¹,\næŠŠåœ°å€ç²˜åˆ°ä¸»é¡µé€‰é¡¹ä¸­å³å¯~")
+        }
+        return !0
+    }, XN.Browser.addBookMark = function (e, t) {
+        var n = navigator.userAgent.toLowerCase().indexOf("mac") != -1 ? "Command/Cmd" : "CTRL";
+        try {
+            window.external.addFavorite(e, t || "" + XN.env.siteName + "-å› ä¸ºçœŸå®ž,æ‰€ä»¥ç²¾å½©")
+        } catch (r) {
+            try {
+                window.sidebar.addPanel(e, t || "" + XN.env.siteName + "-å› ä¸ºçœŸå®ž,æ‰€ä»¥ç²¾å½©")
+            } catch (r) {
+                alert("æ‚¨å¯ä»¥å°è¯•é€šè¿‡å¿«æ·é”®" + n + " + D æ·»åŠ ä¹¦ç­¾~")
+            }
+        }
+    }
+}(), $("email").onkeypress = function () {
+    hideMsg()
+}, $("password").onkeypress = function (e) {
+    hideMsg(), isCapsLockOn(e || window.event) ? showCapsLockMsg("å¤§å†™é”å®šå¼€å¯") : hideCapsLockMsg()
+}, $("password").onblur = function (e) {
+    hideCapsLockMsg()
+}, object.use("login/cryption, dom", function (e, t) {
+    XN.dom.ready(function () {
+        var e = $("email"), n = $("password"), r = "é‚®ç®±/æ‰‹æœºå·/ç”¨æˆ·å", i = $("pwdTip"), s = $("forgetPwd"), o = $("getpassword"), u = $("icode"), a = $("codeTip"), f = $("code"), l = $("codeimg"), c = $("account_stop"), h = $("account_lock"), p = $("errorMessage");
+        t.getElements(".intro .item").addEvent("mouseover", function () {
+            var e = this;
+            XN.element.delClass(e, "unactive"), XN.element.addClass(e, "active")
+        }), t.getElements(".intro .item").addEvent("mouseleave", function () {
+            var e = this;
+            XN.element.delClass(e, "active"), XN.element.addClass(e, "unactive")
+        });
+        if (e.value == "" || e.value == r) {
+            navigator.userAgent.toLowerCase().indexOf("firefox") > 0 && navigator.userAgent.toLowerCase().indexOf("macintosh") > 0 ? e.value = r : (e.focus(), e.value = r, e.select()), (new XN.FORM.inputHelper(e)).setDefaultValue(r), XN.event.addEvent(e, "click", function () {
+                e.value == r && (e.value = "", e.style.color = "#333")
+            }), XN.event.addEvent(e, "blur", function () {
+                e.value == r && (e.style.color = "#888")
+            });
+            var d = setInterval(function () {
+                e.value != "" && e.value != r && (e.style.color = "#333", clearInterval(d))
+            }, 100)
+        } else n.focus();
+        XN.event.addEvent(e, "focus", function () {
+            e.parentNode.style.borderColor = "#8E96A1";
+            var t = setInterval(function () {
+                n.value != "" && (i.style.visibility = "hidden", clearInterval(t))
+            }, 100)
+        });
+        var v = document.cookie, m;
+        m = v.split(";");
+        for (var g = 0, y, b, w = m.length; g < w; g++) {
+            b = jxn.trim(m[g]), y = b.split("=");
+            if (jxn.trim(y[0]) == "ln_hurl")var E = decodeURIComponent(jxn.trim(y[1]));
+            if (jxn.trim(y[0]) == "ln_uact")var S = decodeURIComponent(jxn.trim(y[1]))
+        }
+        if (E && S) {
+            $("personhead").src = E, $("email").value = S;
+            var x = $("personhead"), T = 100, N = 100, C, k;
+
+            function L(e) {
+                var t = e.width / e.height;
+                C = T, k = C / t, k >= N ? e.style.marginTop = -(k - N) / 2 + "px" : (k = N, C = k * t, e
+            .
+                style.marginLeft = -(C - T) / 2 + "px"
+            ),
+                e.width = C, e.height = k
+            }
+
+            x.complete ? L(x) : x.onload = function () {
+                L(x)
+            }
+        } else $("personhead").src = "http://a.xnimg.cn/nx/apps/login/cssimg/person.jpg";
+        $("password").onclick = function () {
+            $("password").type = "password"
+        };
+        var A = {
+            emails: ["@163.com", "@qq.com", "@sina.com", "@126.com", "@sohu.com", "@sina.cn", "@gmail.com", "@hotmail.com", "@tom.com"],
+            liIndex: 0,
+            bindEvent: function (e) {
+                var t = this;
+                e.onblur = function () {
+                    return $("email").value = $("emailList .email-selected").innerHTML, $(emailList).style.display = "none", $("password").focus(), !1
+                }, e.onkeydown = function (e) {
+                    e = e || window.event;
+                    if (e.keyCode == 13)return $("email").value = $("emailList .email-selected").innerHTML, $(emailList).style.display = "none", $("password").focus(), !1
+                }, e.onkeyup = function (e) {
+                    e = e || window.event;
+                    var n = $(this).value;
+                    n = n.split("@");
+                    var r, i = !0;
+                    $("emailList") ? r = $("emailList") : (r = document.createElement("ul"), r
+                    .
+                    id = "emailList", r.className = "emailList", $(this).parentNode.appendChild(r)
+                    ),
+                    r.innerHTML = "";
+                    if (n.length == 1) {
+                        r.style.display = "none";
+                        return
+                    }
+                    for (var s = 0; s < t.emails.length; s++)if (t.emails[s].match(n[1])) {
+                        var o = document.createElement("li"), u = document.createTextNode(n[0] + t.emails[s]);
+                        o.appendChild(u), i && (o.className = "email-selected", i = !1), o.setAttribute("liIndex", s), r.appendChild(o), r.style.display = "block", t.index = 0
+                    }
+                    var a = Sizzle("#emailList li");
+                    if (a.length <= 1)return;
+                    e.keyCode == 38 ? ($("emailList .email-selected").delClass("email-selected"), t.liIndex == 0 ? t.liIndex = a.length - 1 : t.liIndex = t.liIndex - 1, $(a[t.liIndex]).addClass("email-selected")) : e.keyCode == 40 && ($("emailList .email-selected").delClass("email-selected"), t.liIndex == a.length - 1 ? t.liIndex = 0 : t.liIndex = t.liIndex + 1, $(a[t.liIndex]).addClass("email-selected"))
+                }, XN.element.delegate("loginForm", "li", "mouseover", function () {
+                    $("emailList .email-selected").delClass("email-selected"), $(this).addClass("email-selected"), t.liIndex = parseInt($(this).getAttribute("liIndex"))
+                })
+            },
+            init: function (e) {
+                $("loginForm .top").style.zIndex = 10, this.bindEvent(e)
+            }
+        };
+        $("email").onkeyup = function () {
+            $("personhead").src = "http://a.xnimg.cn/nx/apps/login/cssimg/person.jpg"
+        };
+        var O = Sizzle(".qrcode")[0];
+        XN.event.addEvent(O, "click", function () {
+            define(function (require) {
+                require.async("ui/dialog", function () {
+                    function n(e) {
+                        !t.uiDialog.has(e.target).length && e.target !== O && (t.close(), jQuery("body").off("click", n))
+                    }
+
+                    var e = '<div style="padding: 10px;text-align: center"><img src="http://a.xnimg.cn/nx/apps/login/res/down-qr.jpg" /><p>æ‰«æäºŒç»´ç ä¸‹è½½äººäººæ‰‹æœºå®¢æˆ·ç«¯</p></div>', t = jQuery.ui.dialog({
+                        width: XN.browser.IE ? 170 : 190,
+                        buttons: [],
+                        modal: !1,
+                        position: {my: "center", at: "center", of: jQuery(O), collision: "flip"}
+                    }, jQuery(e));
+                    setTimeout(function () {
+                        t.uiDialogTitlebar.hide()
+                    }, 0), jQuery("body").on("click", n)
+                })
+            })
+        }), XN.event.addEvent(e, "blur", function () {
+            var t = e.value;
+            t != null && t != "" && t != "é‚®ç®±/æ‰‹æœºå·/ç”¨æˆ·å" && showCode(), e.parentNode.style.borderColor = "#ADB6C9"
+        }), XN.event.addEvent(n, "focus", function () {
+            i.style.visibility = "hidden"
+        }), XN.event.addEvent(n, "blur", function () {
+            n.value == "" && (i.style.visibility = "visible")
+        });
+        var M = setInterval(function () {
+            n.value != "" && (i.style.visibility = "hidden", clearInterval(M))
+        }, 100);
+        XN.event.addEvent(n, "focus", function () {
+            n.parentNode.style.borderColor = "#8E96A1"
+        }), XN.event.addEvent(n, "blur", function () {
+            n.parentNode.style.borderColor = "#ADB6C9"
+        }), XN.event.addEvent(u, "blur", function () {
+            u.value == "" && (a.style.visibility = "visible"), u.parentNode.style.borderColor = "#ADB6C9"
+        }), XN.event.addEvent(u, "focus", function () {
+            u.parentNode.style.borderColor = "#8E96A1", a.style.visibility = "hidden", f.getElementsByTagName("dd")[0].style.backgroundColor = "#FFF"
+        }), XN.event.addEvent($("autoLogin"), "focus", function () {
+            t.wrap($("autoLogin").parentNode), $("autoLogin").parentNode.addClass("focuscheck")
+        }), XN.event.addEvent($("autoLogin"), "blur", function () {
+            t.wrap($("autoLogin").parentNode), $("autoLogin").parentNode.removeClass("focuscheck")
+        }), $("autoLogin").addEvent("click", function (e) {
+            $($("autoLogin").parentNode).toggleClass("not")
+        });
+        if (window.location.href.indexOf("failCode") > 0) {
+            p.style.display = "block";
+            var _, D = +window.location.search.match(/failCode=(\d+)/)[1];
+            switch (D) {
+                case-1:
+                    _ = "ç™»å½•æˆåŠŸ";
+                    break;
+                case 0:
+                    _ = "ç™»å½•ç³»ç»Ÿé”™è¯¯ï¼Œè¯·ç¨åŽå°è¯•";
+                    break;
+                case 1:
+                    _ = "æ‚¨çš„ç”¨æˆ·åå’Œå¯†ç ä¸åŒ¹é…";
+                    break;
+                case 2:
+                    _ = "æ‚¨çš„ç”¨æˆ·åå’Œå¯†ç ä¸åŒ¹é…";
+                    break;
+                case 4:
+                    _ = "æ‚¨çš„ç”¨æˆ·åå’Œå¯†ç ä¸åŒ¹é…";
+                    break;
+                case 8:
+                    _ = "è¯·è¾“å…¥å¸å·ï¼Œå¯†ç ";
+                    break;
+                case 16:
+                    _ = "æ‚¨çš„å¸å·è¢«åœæ­¢ä½¿ç”¨";
+                    break;
+                case 32:
+                    _ = "å¸å·æœªæ¿€æ´»ï¼Œè¯·æ¿€æ´»å¸å·";
+                    break;
+                case 64:
+                    _ = "å¸å·å·²ç»æ³¨é”€";
+                    break;
+                case 128:
+                    _ = "æ‚¨çš„ç”¨æˆ·åå’Œå¯†ç ä¸åŒ¹é…";
+                    break;
+                case 512:
+                    _ = "è¯·æ‚¨è¾“å…¥éªŒè¯ç ";
+                    break;
+                case 4096:
+                    _ = "ç™»å½•ç³»ç»Ÿé”™è¯¯ï¼Œç¨åŽå°è¯•";
+                    break;
+                case 8192:
+                    _ = "æ‚¨çš„ç”¨æˆ·åå’Œå¯†ç ä¸åŒ¹é…";
+                    break;
+                case 16384:
+                    _ = "ç½‘ç»œä¸ç»™åŠ›ï¼Œè¯·ç¨å€™é‡è¯•"
+            }
+            showMsg(_), catchaCount > 2 && (f.style.display = "block", l.style.display = "block");
+            if (D == 64)h.style.display = "block"; else if (D == 512)f.style.display = "block", l.style.display = "block"; else if (D == 16)c.style.display = "block"; else if (D == 1 || D == 2 || D == 4 || D == 128)e.parentNode.style.backgroundColor = "#FFFFD9", n.parentNode.style.backgroundColor = "#FFFFD9";
+            refreshCode_login()
+        }
+        var P = e.value;
+        P != null && P != "" && P != "é‚®ç®±/æ‰‹æœºå·/ç”¨æˆ·å" && showCode(), getKeys();
+        if (document.createEvent) {
+            var H = document.createEvent("HTMLEvents");
+            H.initEvent("focus", !1, !0), n.dispatchEvent(H), e.dispatchEvent(H)
+        }
+    })
+}), function () {
+    if (typeof homePreloadFiles == "undefined")return;
+    var e = !1, t = function () {
+        if (e)return;
+        e = !0;
+        for (var t = 0, n = homePreloadFiles.length; t < n; t++)(new Image).src = homePreloadFiles[t]
+    };
+    XN.dom.ready(function () {
+        $("email").addEvent("focus", t), $("password").addEvent("focus", t), setTimeout(t, 3e3)
+    })
+}(), object.define("renren/core/ipadBanner", "jxn", function (require, e) {
+    var t = jxn(".iPadDown"), n = function () {
+        var e = r();
+        if (!e)return;
+        s()
+    }, r = function () {
+        var e = "";
+        if (navigator.userAgent.match(/iPad/i) && navigator.userAgent.match(/OS 6/i))e = "itms-apps://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=455215726"; else {
+            if (!navigator.userAgent.match(/iPad/i) || !navigator.userAgent.match(/OS 7/i))return !1;
+            e = "itms-apps://itunes.apple.com/app/id455215726"
+        }
+        return i(), jxn(".iUrl").attr("href", e), o(), u(), !0
+    }, i = function () {
+        if (t.length == 0) {
+            var e = ['<div class="iPadDown">', '<a href="#" class="closeBtn"></a>', '<a href="#" class="iUrl">', '<img src="http://a.xnimg.cn/n/core/modules/ipadBanner/images/banner-width.png" class="iPadBg">', "</a>", "</div>"].join("");
+            t = jxn(e), t.insertBefore(jxn("#navBar"))
+        } else t.show();
+        var n = jxn(".iPadBg"), r = jxn(window).width() + "px";
+        n.css("width", r)
+    }, s = function () {
+        var e = jxn(".closeBtn");
+        e.click(function () {
+            var e = jxn("#navBar"), n = jxn(".site-nav-wrapper");
+            t.hide(), n.css("height", "31px"), e.css("top", "0")
+        })
+    }, o = function () {
+        var e = jxn("#navBar"), t = jxn(".site-nav-wrapper");
+        t.css("height", "95px"), e.css("top", "64px")
+    }, u = function () {
+        jxn(".site-nav-wrapper").length > 0 && t.css("position", "fixed")
+    };
+    e.init = n
+}), XN.dom.ready(function () {
+    object.use("renren/core/ipadBanner", function (e) {
+        e.init()
+    })
+}), define("lawInfo", function (require, e) {
+    var t = jQuery.noConflict(), n = {
+        tpl: ['<div class="law-info">', "åŒ—äº¬åƒæ©¡ç½‘æ™¯ç§‘æŠ€å‘å±•æœ‰é™å…¬å¸<br />", '<a href="http://sq.ccm.gov.cn/ccnt/sczr/service/business/emark/toDetail/DFB957BAEB8B417882539C9B9F9547E6" target="_blank">äº¬ç½‘æ–‡[2013]0136-030å·</a> Â· <a href="http://www.miibeian.gov.cn/" target="_blank">äº¬ICPè¯090254å·</a><br />', "äº¬å…¬ç½‘å®‰å¤‡110000000009å· Â· ç”²æµ‹èµ„å­—11002066<br />", "æ–‡åŒ–éƒ¨ç›‘ç£ç”µå­é‚®ç®±ï¼šwlwh@vip.sina.com<br />", '<a href="http://a.xnimg.cn/n/core/res/certificate.jpg" target="_blank">äº’è”ç½‘è¯å“ä¿¡æ¯æœåŠ¡èµ„æ ¼è¯</a> Â· <a href="http://py.qianlong.com" target="_blank">åŒ—äº¬åœ°åŒºç½‘ç«™è”åˆè¾Ÿè°£å¹³å°</a><br />', "è¿æ³•å’Œä¸è‰¯ä¿¡æ¯ä¸¾æŠ¥ç”µè¯ï¼š027-87676735<br />", "ä¸¾æŠ¥é‚®ç®±ï¼šjubao@renren-inc.com<br />", '<div><img src="http://s.xnimg.cn/imgpro/civilization/jubaologo.png" height="25" width="25"><a href="http://www.12377.cn/" target="_blank" style="margin-left: 5px;">è¿æ³•å’Œä¸è‰¯ä¿¡æ¯ä¸¾æŠ¥ä¸­å¿ƒ</a></div>', '<p class="typ1"><a href="http://www.bjjubao.org/" target="_blank">åŒ—äº¬äº’è”ç½‘ä¸¾æŠ¥ä¸­å¿ƒ</a></p>', '<p class="typ2"><a href="http://www.bj.cyberpolice.cn/index.jsp" target="_blank">ç½‘ç»œ110æŠ¥è­¦æœåŠ¡</a></p>', '<p class="typ3"><a href="http://www.bjwhzf.gov.cn/accuse.do" target="_blank">åŒ—äº¬æ–‡åŒ–å¸‚åœºä¸¾æŠ¥çƒ­çº¿</a></p>', "</div>"].join(""),
+        showInfo: function () {
+            this.dialog = t.ui.dialog({
+                title: "æ³•å¾‹å£°æ˜Ž", width: 430, buttons: [], close: function () {
+                    t(this).remove()
+                }
+            }, this.tpl)
+        }
+    };
+    e.init = function () {
+        n.showInfo()
+    }
+}), define(function (require) {
+    require("ui/dialog");
+    var e = require("jquery"), t = {
+        lawInfo: function () {
+            var t = e("#lawInfo");
+            if (!t.length)return;
+            t.click(function () {
+                require.async("lawInfo", function (e) {
+                    e.init()
+                })
+            })
+        }, hideFocus: function () {
+            var t = e(".login-recommend .content");
+            t.each(function (e, t) {
+                t.setAttribute("hideFocus", !0)
+            })
+        }
+    }, n = function () {
+        if (e(".login-superlarge").length) {
+            var t = e("#ad100000000108"), n = e(window).width();
+            if (n > 982 && n < 1440) {
+                var r = (n - 982) / 2;
+                t.width(n - 2).css("left", -(n - 982) / 2)
+            }
+        }
+    };
+    e(function () {
+        for (var r in t)t[r]();
+        n(), e(window).resize(function () {
+            n()
+        })
+    })
+});
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
