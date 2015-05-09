@@ -70,25 +70,12 @@ class Renren(BaseClient):
                 'password':rsa.encryptString(key['e'],key['n'],self.password),
                 'rkey':key['rkey'],
 
-                # 'password': '2f4d738df681b2b461a11d9aecb1c75bbdea9a60cef42bb2711e585b40973b27',
-                # 'rkey':'c5c08b36d1daef7b10b7ae3c886850e6',
-
-                # 'password': '1b939a7fe518ac8ba13bb3cb86cd75b63f57f672b3f9af6c7eafcd4fa3a11ab1',
-                # 'rkey':'2def5d84381e7889d5a3035d83561d72',
-
-                # 'password': '28bcdc779d96730b57a860db7165053c83b97e713927a48d7c76203af35806ec',
-                # 'rkey':'d5921c94a281db272ce6560db2f03780',
         }
 
-        # 18ae8d66e33b8d92da61d7150053509b4a0cc4e6bfafdf3fa117efdd72e6b7f8
-
-        # url = self.get_url();
-        # print('url=',url);
         #
         url = 'http://www.renren.com/ajaxLogin/login?1=1&uniqueTimestamp=%f' % random.random()
 
         rsp = self.session.post(
-            # url='http://www.renren.com/ajaxLogin/login?1=1&uniqueTimestamp=2015452210746',
             url=url,
             data=post_data,
             headers=header,
@@ -139,5 +126,4 @@ if __name__ == '__main__':
         password=cf.get('renren','password')
     )
     renren.sign_in();
-    # renren.test();
 
